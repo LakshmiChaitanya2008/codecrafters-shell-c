@@ -4,13 +4,11 @@
 int main(int argc, char *argv[]) {
   // Flush after every printf
   setbuf(stdout, NULL);
-
-  // TODO: Uncomment the code below to pass the first stage
-  printf("$ ");
-  char cmd[100]; 
-  scanf("%s", cmd);
-
-  printf("%s: command not found\n", cmd);
-
+  while(true) {
+    printf("$ ");
+    char cmd[100]; 
+    scanf("%s", cmd);
+    printf("%s: command not found\n", cmd);
+  }
   return 0;
 }
