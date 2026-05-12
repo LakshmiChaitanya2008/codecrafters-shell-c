@@ -30,9 +30,9 @@ int main(int argc, char *argv[]) {
 	printf("%s\n", cmd + 5);
     } else if(strncmp(cmd, "type ", 5) == 0) {
 	if(isBuiltIn(cmd + 5)) {
-	   printf("%s is shell builtin\n", cmd);
+	   printf("%s is shell builtin\n", cmd + 5);
 	} else {
-          printf("%s: command not found\n", cmd);
+          printf("%s: command not found\n", cmd + 5);
 	}
     } else {
         printf("%s: command not found\n", cmd);
