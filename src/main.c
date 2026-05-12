@@ -56,7 +56,7 @@ void runExecutable(char cmd[]) {
   if(pid == 0) {
     execvp(args[0], args);
 
-    printf("%s: command not found", args[0]);
+    printf("%s: command not found\n", args[0]);
     exit(1);
   } else {
     wait(NULL);
