@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 	if(isBuiltIn(arg)) {
 	   printf("%s is a shell builtin\n", arg);
 	} else {
-          printf("%s: command not found\n", arg);
+          printf("%s: not found\n", arg);
 	}
     } else {
         printf("%s: command not found\n", cmd);
