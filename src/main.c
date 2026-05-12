@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <sys/wait.h>
 
 bool isBuiltIn(char str[]) {
   char cmds[][100] = {"exit", "echo", "type"};
@@ -37,6 +38,32 @@ char* locateExecutable(char cmd[]) {
   return NULL;
 }
 
+void runExecutable(char cmd[]) {
+  char *args[100];
+
+  char *token = strtok(cmd, " ");
+  int i = 0;
+
+  while(token != NULL) {
+    args[i++] = token;
+    token = strtok(NULL, " ");
+  }
+
+  args[i] = NULL;
+
+  pid_t pid = fork();
+
+  if(pid == 0) {
+    execvp(args[0], args);
+
+    printf("%s: command not found", args[0]);
+    exit(1);
+  } else {
+    wait(NULL);
+  }
+
+}
+
 int main(int argc, char *argv[]) {
   // Flush after every printf
   setbuf(stdout, NULL);
@@ -68,7 +95,7 @@ int main(int argc, char *argv[]) {
 	   }
 	}
     } else {
-        printf("%s: command not found\n", cmd);
+        runExecutable(cmd);
     }
   }
   return 0;
