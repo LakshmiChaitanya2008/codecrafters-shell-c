@@ -7,12 +7,19 @@ int main(int argc, char *argv[]) {
   setbuf(stdout, NULL);
   while(true) {
     printf("$ ");
-    char cmd[100]; 
-    scanf("%s", cmd);
+
+    char cmd[100];
+
+    fgets(cmd, 100, stdin);
+    cmd[strlen(cmd) - 1] = '\0';
+
     if(strcmp(cmd, "exit") == 0) {
 	exit(0);
+    } else if(strncmp(cmd, "echo ", 5) == 0) {
+	printf("%s\n", cmd + 5);
+    } else {
+        printf("%s: command not found\n", cmd);
     }
-    printf("%s: command not found\n", cmd);
   }
   return 0;
 }
