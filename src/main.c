@@ -29,10 +29,11 @@ int main(int argc, char *argv[]) {
     } else if(strncmp(cmd, "echo ", 5) == 0) {
 	printf("%s\n", cmd + 5);
     } else if(strncmp(cmd, "type ", 5) == 0) {
-	if(isBuiltIn(cmd + 5)) {
-	   printf("%s is shell builtin\n", cmd + 5);
+	char *arg = cmd + 5;
+	if(isBuiltIn(arg)) {
+	   printf("%s is a shell builtin\n", arg);
 	} else {
-          printf("%s: command not found\n", cmd + 5);
+          printf("%s: command not found\n", arg);
 	}
     } else {
         printf("%s: command not found\n", cmd);
