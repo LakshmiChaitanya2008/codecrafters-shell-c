@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <stdbool.h>
 
 bool isBuiltIn(char str[]) {
   char cmds[][100] = {"exit", "echo", "type"};
@@ -13,6 +15,28 @@ bool isBuiltIn(char str[]) {
   return false;
 }
 
+char* locateExecutable(char cmd[]) {
+  char *path_env = getenv("PATH");
+  static char path[4096];
+
+  char path_copy[4096];
+  strcpy(path_copy, path_env);
+
+  char *dir = strtok(path_copy, ":");
+
+  while(dir != NULL) {
+    sprintf(path, "%s/%s", dir, cmd);
+
+    if(access(path, X_OK) == 0) {
+	return path;
+    }
+
+    dir = strtok(NULL, ":");
+  }
+  
+  return NULL;
+}
+
 int main(int argc, char *argv[]) {
   // Flush after every printf
   setbuf(stdout, NULL);
@@ -21,8 +45,10 @@ int main(int argc, char *argv[]) {
 
     char cmd[100];
 
-    fgets(cmd, 100, stdin);
-    cmd[strlen(cmd) - 1] = '\0';
+    if(fgets(cmd, 100, stdin) == NULL) {
+	break;
+    }
+    cmd[strcspn(cmd, "\n")] = '\0';
 
     if(strcmp(cmd, "exit") == 0) {
 	exit(0);
@@ -33,7 +59,13 @@ int main(int argc, char *argv[]) {
 	if(isBuiltIn(arg)) {
 	   printf("%s is a shell builtin\n", arg);
 	} else {
-          printf("%s: not found\n", arg);
+           char* path = locateExecutable(arg);
+
+	   if(path != NULL) {
+	     printf("%s is %s\n", arg, path);
+	   } else {
+	     printf("%s: not found\n", arg);
+	   }
 	}
     } else {
         printf("%s: command not found\n", cmd);
